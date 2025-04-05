@@ -15,14 +15,14 @@ export function Homepage({ data }: {
     <div className="flex flex-col items-start gap-2 w-full md:w-[512px] mx-auto p-8">
       <p className="text-4xl font-brand mr-8">You are <span className="text-accent">invited</span> to my <span className="text-accent">birthday party!</span></p>
       <p className="font-brand mt-4 mb-8">From: {titleCase(domain)}</p>
-      <form className="flex flex-col gap-2 justify-left mt-2 mb-8">
+      <form className="w-full flex flex-col gap-2 justify-left mt-2 mb-8">
         <label className="font-bold">Your name</label>
         <input type="text" className="p-2 px-3 bg-zinc-100 rounded border-1 border-solid border-zinc-200" placeholder="Enter your name else no food for you" />
         <button type="submit" className="cursor-pointer p-2 px-4 self-end rounded border-emerald-500 bg-emerald-500 text-white font-bold">
           Confirm
         </button>
       </form>
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-6">
         <div className="flex flex-row items-center gap-2">
           <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15.3842 16.9158C16.0323 15.5664 17.096 14.6712 18.5809 14.4274C25.5639 13.2811 30.5241 22.1541 24.7169 26.9205C19.4742 31.2235 12.6133 26.0127 14.4559 19.963" stroke="black" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
