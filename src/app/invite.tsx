@@ -12,7 +12,7 @@ export function Homepage({ data }: {
 }) {
   const { domain, location, start, end } = data
   return (
-    <div className="flex flex-col items-start gap-2 w-full md:w-[512px] mx-auto p-8">
+    <div className="flex flex-col gap-2 w-full md:w-[512px] mx-auto p-8">
       <p className="text-4xl font-brand mr-8">You are <span className="text-accent">invited</span> to my <span className="text-accent">birthday party!</span></p>
       <p className="font-brand mt-4 mb-8">From: {titleCase(domain)}</p>
       <form className="w-full flex flex-col gap-2 justify-left mt-2 mb-8">
