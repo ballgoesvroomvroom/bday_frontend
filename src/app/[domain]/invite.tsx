@@ -1,27 +1,73 @@
 "use client"
 
+import config from "@/config"
 import { titleCase, timeRepr } from "@/utils/helper"
+import { useRef, useState } from "react"
+import { useRouter } from "next/navigation";
 
 export function Homepage({ data }: {
   data: {
+    code: string,
     domain: string,
     location: string,
     start: Date,
     end: Date
   }
 }) {
-  const { domain, location, start, end } = data
+  const { code, domain, location, start, end } = data
+
+  const router = useRouter()
+
+  const nameRef = useRef<HTMLInputElement>(null)
+  const [clickedDebounce, setClickDebounce] = useState(true)
+
   return (
     <div className="flex flex-col gap-2 w-full md:w-[512px] mx-auto p-8">
       <p className="text-4xl font-brand mr-8">You are <span className="text-accent">invited</span> to my <span className="text-accent">birthday party!</span></p>
       <p className="font-brand mt-4 mb-8">From: {titleCase(domain)}</p>
-      <form className="w-full flex flex-col gap-2 justify-left mt-2 mb-8">
+      <div className="w-full flex flex-col gap-2 justify-left mt-2 mb-8">
         <label className="font-bold">Your name</label>
-        <input type="text" className="p-2 px-3 bg-zinc-100 rounded border-1 border-solid border-zinc-200" placeholder="Enter your name else no food for you" />
-        <button type="submit" className="cursor-pointer p-2 px-4 self-end rounded border-emerald-500 bg-emerald-500 text-white font-bold">
+        <input ref={nameRef} type="text" className="p-2 px-3 bg-zinc-100 rounded border-1 border-solid border-zinc-200" placeholder="Enter your name else no food for you" />
+        <button className="p-2 px-4 self-end rounded bg-emerald-500 text-white disabled:text-zinc-400 disabled:bg-emerald-900 transition-colors font-bold" disabled={!clickedDebounce} onClick={async () => {
+          console.log("CLICKING")
+          const name = nameRef.current?.value
+          console.log("name", name)
+          if (name == null || name.length === 0 || name.length >= 256) {
+            // failed sanity check
+            console.warn("Name cannot be empty")
+            return
+          }
+
+          if (!clickedDebounce) {
+            // debounce not yet reset
+            return
+          }
+          // set debounce
+          setClickDebounce(false)
+
+          const resp = await fetch(`${config.BACKEND_URL}/api/events/${code}`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json"
+            },
+            body: JSON.stringify({ name })
+          }).then(r => {
+            if (r.status === 200) {
+              return r.json()
+            }
+          })
+
+          if (resp == null) {
+            // failed
+            setClickDebounce(true) // reset debounce
+          } else {
+            // successful --> refresh page
+            router.refresh()
+          }
+        }}>
           Confirm
         </button>
-      </form>
+      </div>
       <section className="flex flex-col gap-6">
         <div className="flex flex-row items-center gap-2">
           <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +90,7 @@ export function Homepage({ data }: {
           <p className="font-brand grow">{location}</p>
         </div>
         <div className="rounded shadow-md aspect-square">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7796769776623!2d103.84966711278412!3d1.3073856617007107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19a2e4a9ac7f%3A0xe422ea6a771b2f41!2sThe%20Loft%20-%20All%20In%20One%20(BGL)!5e0!3m2!1sen!2ssg!4v1743817067300!5m2!1sen!2ssg" width="100%" height="100%" className="border-0" allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7780451969293!2d103.856354!3d1.3084122999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da195a3ae9acdb%3A0xc10db37440d08097!2sLevel%20Two%20Space!5e0!3m2!1sen!2ssg!4v1743841968767!5m2!1sen!2ssg" width="100%" height="100%" className="border-0" allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div className="flex flex-row items-center gap-2">
           <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
