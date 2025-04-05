@@ -90,7 +90,7 @@ export function After({ data }: {
 }) {
   const { name, location, start, end } = data
   return (
-    <div className="min-h-svh flex flex-col gap-2 p-8">
+    <div className="min-h-svh flex flex-col items-start gap-2 w-full md:w-[512px] mx-auto p-8">
       <p className="text-4xl font-brand mr-8 mb-10">See you <span className="text-accent">{`${titleCase(name)}!`}</span></p>
       <p className="font-brand">{location}</p>
       <div className="flex flex-col gap-2 mt-6 font-brand">
