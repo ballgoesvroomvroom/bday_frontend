@@ -204,14 +204,15 @@ export function After({ data }: {
     remarks: string // empty string if not inputted
   }
 }) {
-  const { name, location, start, end, allergies, remarks } = data
+  const { name, location, start, end, cut, allergies, remarks } = data
   return (
     <div className="min-h-svh flex flex-col items-start gap-2 w-full md:w-[512px] mx-auto p-8">
       <p className="text-4xl font-brand mr-8 mb-10">See you <span className="text-accent">{`${titleCase(name)}!`}</span></p>
       <p className="font-brand">{location}</p>
       <div className="flex flex-col gap-2 mt-6 font-brand">
-        <p className="">{start.toLocaleDateString("en-SG", { day: "numeric", month: "short", year: "numeric" })}</p>
-        <p className="">{`${timeRepr(start)} - ${timeRepr(end)}`}</p>
+        <p>{start.toLocaleDateString("en-SG", { day: "numeric", month: "short", year: "numeric" })}</p>
+        <p>{`${timeRepr(start)} - ${timeRepr(end)}`}</p>
+        <p>{`Cut cake timing: ${timeRepr(cut)}`}</p>
       </div>
       {
         (allergies.length !== 0 || remarks.length !== 0) &&
