@@ -29,7 +29,7 @@ export default async function DataFetcher() {
   console.log("data", data)
 
   return (
-    <div className="w-svw">
+    <div className="">
     {
       data.invite.status === 0 ?
         <Homepage data={{
@@ -37,13 +37,17 @@ export default async function DataFetcher() {
           domain: data.event.domain_id,
           location: data.event.location,
           start: new Date(data.event.start),
+          cut: new Date(data.event.cut),
           end: new Date(data.event.end)
         }}/>
         : <After data={{
           name: data.invite.name,
           location: data.event.location,
           start: new Date(data.event.start),
-          end: new Date(data.event.end)
+          end: new Date(data.event.end),
+          cut: new Date(data.event.cut),
+          allergies: data.invite.allergies, // empty string if not inputted
+          remarks: data.invite.remarks // empty string if not inputted
         }}/>
     }
     </div>

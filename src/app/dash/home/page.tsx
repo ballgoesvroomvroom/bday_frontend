@@ -12,6 +12,8 @@ type inviteData = {
 	event_id: string,
 	status: 0|1,
 	name: string, // empty string if status is 0
+	allergies: string, // empty string if not applicable
+	remarks: string, // empty string if not applicable
 	accepted_tz: Date, 
 	created_on: Date
 }
@@ -59,6 +61,8 @@ export default function DashboardHome() {
 								event_id: EVENT_ID,
 								status: 0,
 								name: "",
+								allergies: "",
+								remarks: "",
 								accepted_tz: new Date(0),
 								created_on: new Date()
 							})
@@ -67,18 +71,20 @@ export default function DashboardHome() {
 				</div>
 				<table className="table-fixed w-full mt-8">
 					<thead>
-						<tr className="[&>td]:p-2 font-bold border-b-[1px] border-zinc-800">
+						<tr className="[&>td]:p-2 [&>td]:align-text-bottom font-bold border-b-[1px] border-zinc-800">
 							<td>Status</td>
 							<td>Code</td>
 							<td>Name</td>
-							<td className="hidden md:table-row">Accepted on</td>
+							<td className="hidden md:table-cell">Accepted on</td>
+							<td className="hidden md:table-cell">Allergies</td>
+							<td className="hidden md:table-cell">Remarks</td>
 							<td>Action</td>
 						</tr>
 					</thead>
 					<tbody>
 					{
 						data.map((item, idx) =>
-							<tr key={idx} className="[&>td]:p-2">
+							<tr key={idx} className="[&>td]:p-2 [&>td]:align-top">
 								<td style={{
 									color: ["#d87708", "#007b0e"][item.status]
 								}}>{["Pending", "Accepted"][item.status]}</td>
@@ -86,10 +92,16 @@ export default function DashboardHome() {
 								<td style={{
 									color: ["rgb(183 183 183)", "currentColor"][item.status]
 								}}>{item.name.length === 0 ? "Not yet" : item.name}</td>
-								<td className="hidden md:table-row">{item.status === 1 ? item.accepted_tz.toLocaleString("en-SG") : ""}</td>
+								<td className="hidden md:table-cell break-all">{item.status === 1 ? item.accepted_tz.toLocaleString("en-SG") : ""}</td>
+								<td className="hidden md:table-cell" style={{
+									color: ["red", "rgb(183 183 183)"][+(item.allergies.length === 0)]
+								}}>{item.allergies.length === 0 ? (item.status === 0 ? "" : "NIL") : item.allergies}</td>
+								<td className="hidden md:table-cell" style={{
+									color: ["currentColor", "rgb(183 183 183)"][+(item.remarks.length === 0)]
+								}}>{item.remarks.length == 0 ? (item.status === 0 ? "" : "NIL") : item.remarks}</td>
 								<td>
 									<button className="inline-flex gap-2 items-center justify-center px-2 py-1 border-1 text-zinc-800 rounded hover:bg-zinc-800 hover:text-white focus:bg-zinc-800 focus:text-white" onClick={() => {
-										navigator.clipboard.writeText(`blowmycandles.com/${item.id}`)
+										navigator.clipboard.writeText(`https://blowmycandles.com/${item.id}`)
 									}}>
 										<Copy size={16} />
 										<span className="hidden md:inline">Copy</span>
